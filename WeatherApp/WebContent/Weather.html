@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="ISO-8859-1">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<title>Client</title>
+</head>
+<body>
+
+<div ng-controller="MyCtrl">
+   The weather from <b>{{weatherLocation}} </b> in {{Country}}
+   <p><b>Temperature :</b> The Temperature is: {{curTemp}} degrees F , Max Temperature : {{MaxTemp}} degrees F, Min Temperature : {{MinTemp}} degrees F</p>
+   <p><b>Humidity :</b> The humidity is: {{humidity}}</p>
+    <p><b>Wind :</b> The wind speed is: {{windSpeed}} and the degree is {{windDegree}}</p>
+	
+    <input type="text" ng-model="location"/>
+    <button ng-click="findWeather()">submit</button>
+</div>
+
+
+<script type="text/javascript">
+	angular.module('myApp',[]).controller("MyCtrl", MyCtrl);
+
+
+function MyCtrl($scope, $http) {
+
+    
+
+    $scope.findWeather = function(){
+   
+	
+            $http.get(" http://api.openweathermap.org/data/2.5/weather?APPID=53a7b50c9f6ef9390940f5ac4e451c52&q=" + $scope.location)
+			.then(function(response) {
+			//First function handles success
+			$scope.weatherLocation = response.data.name;
+			$scope.windSpeed = response.data.wind.speed;
+			$scope.windDegree = response.data.wind.deg;
+			$scope.Country = response.data.sys.country;
+			$scope.curTemp = response.data.main.temp;
+			$scope.MaxTemp = response.data.main.temp_max;
+			$scope.MinTemp = response.data.main.temp_min;
+			$scope.humidity = response.data.main.humidity;
+			//$scope.content = response.data;
+    }, function(response) {
+			//Second function handles error
+			$scope.weatherLocation = "Something went wrong";
+    });
+    }
+	
+	
+}
+	
+</script>
+</body>
+</html>
