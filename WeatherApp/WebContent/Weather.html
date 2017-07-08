@@ -8,11 +8,8 @@
 <body>
 
 <div ng-controller="MyCtrl">
-   The weather from <b>{{weatherLocation}} </b> in {{Country}}
-   <p><b>Temperature :</b> The Temperature is: {{curTemp}} degrees F , Max Temperature : {{MaxTemp}} degrees F, Min Temperature : {{MinTemp}} degrees F</p>
-   <p><b>Humidity :</b> The humidity is: {{humidity}}</p>
-    <p><b>Wind :</b> The wind speed is: {{windSpeed}} and the degree is {{windDegree}}</p>
-	
+   The weather from {{weatherLocation}}
+    <p>The Country is: {{country}} and the temprature degree is {{tempDegree}}</p>
     <input type="text" ng-model="location"/>
     <button ng-click="findWeather()">submit</button>
 </div>
@@ -24,32 +21,20 @@
 
 function MyCtrl($scope, $http) {
 
-    
+	$scope.location = "";
 
     $scope.findWeather = function(){
-   
-	
-            $http.get(" http://api.openweathermap.org/data/2.5/weather?APPID=53a7b50c9f6ef9390940f5ac4e451c52&q=" + $scope.location)
-			.then(function(response) {
-			//First function handles success
-			$scope.weatherLocation = response.data.name;
-			$scope.windSpeed = response.data.wind.speed;
-			$scope.windDegree = response.data.wind.deg;
-			$scope.Country = response.data.sys.country;
-			$scope.curTemp = response.data.main.temp;
-			$scope.MaxTemp = response.data.main.temp_max;
-			$scope.MinTemp = response.data.main.temp_min;
-			$scope.humidity = response.data.main.humidity;
-			//$scope.content = response.data;
-    }, function(response) {
-			//Second function handles error
-			$scope.weatherLocation = "Something went wrong";
-    });
+                $http.get(" http://api.apixu.com/v1/current.json?key=add134be556645f3a56193534170707&q=" + $scope.location).success(function(data){
+    $scope.weatherLocation = data.location.name;
+    $scope.country = data.location.country;
+    $scope.tempDegree = data.current.temp_c;
+
+    }) 
     }
-	
-	
 }
+
 	
 </script>
 </body>
 </html>
+
